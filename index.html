@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Angular TODO app</title>
+    <link href='https://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
+    <link href='styles/main.css' rel='stylesheet' type="text/css">
+  </head>
+  <body ng-app="toDoListApp">
+
+      <div ng-controller="mainCtrl" class="list">
+        <h1 ng-click="helloWorld()">MY TODO APPlICATION</h1>
+        <input type="checkbox">
+        <label class="editing-label">a sample todo</label>
+        <input class="editing-label"type="text">
+        <div class="actions" ng-controller="coolCtrl">
+          <a href="#" ng-click="whoAmI()">Edit</a>
+          <a href="#" ng-click="helloWorld()">Save</a>
+          <!-- says when user clicks save, fire the helloWorld function -->
+          <a href="#" class="Delete">Delete</a>
+        </div>
+      </div>
+
+      <div ng-controller="imASibling">
+        {{foobar}}
+      </div>
+
+
+    <script src="bower_components/angular/angular.js" type="text/javascript"></script>
+    <script src="scripts/app.js" type="text/javascript"></script>
+  </body>
+</html>
