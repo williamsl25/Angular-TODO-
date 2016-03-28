@@ -27,8 +27,8 @@ a {
     .list .item .editing-label {
       margin-left: 5px;
       font-family: "Varela Round";
-      border-radius: 2px;
-      border: 2px solid #a7b9c4;
+      /*border-radius: 2px;
+      border: 2px solid #a7b9c4;*/
       font-size: 16px;
       padding: 15px 0 15px 10px;
       width: 60%; }
@@ -40,10 +40,11 @@ a {
         margin-left: 10px; }
         .list .item .actions .delete:hover {
           color: #f28888; }
-    .list .item.editing .actions {
+    .list .item .editing-item .actions {
       margin-top: 17px; }
   .list .edited label:after {
     content: " edited";
+    /*this will mark the todo as edited when it evaluates to true and has been edited*/
     text-transform: uppercase;
     color: #a7b9c4;
     font-size: 14px;
@@ -54,7 +55,7 @@ a {
   .list .add {
     padding: 25px 0 27px 25px; }
 
-input[type="checkbox"] {
+/*input[type="checkbox"] {
     display:none;
 }
 input[type="checkbox"] + span {
@@ -68,4 +69,4 @@ input[type="checkbox"] + span {
 }
 input[type="checkbox"]:checked + span {
     background:url(checkbox-filled.svg) left top no-repeat;
-}
+}*/

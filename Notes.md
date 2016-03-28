@@ -70,3 +70,145 @@ Notice when I have the main controller element selected I have access to the hel
 3. the imASibling controller is a sibling of mainCtrl
 
 #### Adding Data using ng-model
+1. we want the user to edit the todo using the input field - do this with the ng-model directive
+```
+ng-model="todo.name"
+```
+* The ng-model directive is set equal to the $scope variable with the same name. For instance, `todo.name` is equal to `$scope.todo.name`.
+* ng-model as an attribute says bind the value in this directive to an object in the scope => the todo object
+* open up ng-inspector and see the two way binding - when start typing the todo variable is initialized => every time make a change to the input the variable in the scope changes => constantly updates variables in the scope as the input is changed by the user.
+* the value of the input is todo.name => todo is an object and we are storing the value of this input on the name key
+
+2. use ng-model on the checkbox input - bind it to todo.completed
+```
+ng-model="todo.completed"
+```
+* open ng-inspector and when checkbox is checked noticed the todo is completed
+
+3. Add the todo.name value to html of our application so that when you type the todo it will show up on our todo list=> inside the label add {{todo.name}}
+
+####  use ng-click to change application states
+1. the editing state will be applied when we click the edit button
+```
+ng-click="editing = !editing"
+```
+* this means that when the edit button is clicked set it to the opp of what it was set before => if editing is set to true, set it to false and vise versa
+
+2. use two other directives to hide and show content based on whether editing is true or false -> input will only show when we are editing
+* when expression evaluates to true, hide the content on the label
+```
+ng-hide="editing"
+```
+on the input do the opposite with ng-show = when expression evaluates to true it will show the elements content
+```
+ng-show="editing"
+```
+
+#### using ng-repeat to inject html for every data element
+NG-repeat is a directive that allows you to repeat HTML content or items in a JavaScript array or an object and we use it to create our to do list.
+1. create an array of fake todos - app.js
+```
+  $scope.todos = [
+  {"name": "clean the house"},
+  {"name": "clean the dog"},
+  {"name": "clean the car"},
+  {"name": "laundry"}
+]
+```
+2. check and make sure our variable is accessible inside our scope - in index.html add after the delete button
+```
+{{todos}}
+```
+3. use ng-repeat as an attribute on another element to create a todo for each element
+```
+<div ng-repeat="todo in todos">
+```
+#### useing ng-blur and ng-class to improve user experience
+1. when a user is editing the name of a todo, rather than having to click the edit button, all the have to do it click out of the input - use ng-blur - put it in the input
+```
+<input ng-blur"editing = false;"
+```
+* say editing equals false -> The reason we can do this is because the ng-Blur directive fires in only one direction (it fires only when the user is clicking out of an input.)
+* This is unlike the ng-Click directive, for instance, on the edit button. With the edit button, this uses more of a toggle.
+
+2. use ng-class bc the buttons are not aligned with the input box they are too high we only want the css to apply when the scope is in editing mode and is visible
+```
+<div class="item " ng-class="{'editing-item': editing}" ng-repeat="todo in todos">
+```
+#### Use ng-change to set data state
+1. In our application we want to keep track if the user has edited a to do.
+2. add ng-change to our input
+```
+ng-change="learningNgChange()"
+```
+3. in app.js add the learningNgChange function
+```
+$scope.learningNgChange = function() {
+  console.log("An input changed");
+};
+```
+* it will be fired any time the value of the input changes - now The different directives we're using all worked together.  For instance the expression that is evaluated when NG Change fires does not affect ng blur or ng model. They all work together.
+
+4. make the ng-change more useful to our project- use NgChange to mark todo.edited as true. Now we'll be able to keep track of which todos have been edited and which have not in my data.
+```
+<input ng-change="todo.edited = true"
+```
+5. add css so that we can see which have been edited an set to true -in main.css - do this by adding the edited class to the todo item
+* add 'edited': todo.edited
+
+```
+<div class="item" ng-class="{'editing-item': editing, 'edited': todo.edited}" ng-repeat="todo in todos">
+```
+#### Services
+add service in app.js
+* Services can be used across your application through dependency injection
+* it is  is how Angular makes code available to multiple parts of the application.
+* mult controllers can use the same service as long as they define the service as a dependency
+* In order to attach a method to the service - use the THIS key word. - THIS refers to the service Itself. - So when I attach the method hello console to THIS it will be available as a method of the service
+
+```
+.service('dataService', function(){
+  this.helloConsole = function(){
+    console.log("this is the hello console service")
+  }
+});
+```
+* provide the name of the service as a dependency in the controllers
+```
+dataService
+```
+* now we can access the services method
+```
+$scope.helloConsole = dataService.helloConsole;
+```
+* see it at work when click the save button
+```
+ng-click="helloConsole()"
+```
+#### Using Services to get Data
+1. move todos to their own file - todos.json into a mock folder
+2. now the mock data will be like making requests to a server
+3. add a GET request in app.js
+4. in order to make the get request to get our mock data we're going to use the HTTP provider. - add it to the service
+```
+.service('dataService', function($http){...
+```
+* in service
+```
+this.getTodos = function(callback){
+  $http.get('mock/todods.json')
+  .then(callback)
+}
+```
+The then method is used to execute code after a response has been received from the server.  1st parameter is a callback
+
+* in controller - response.data are the todos
+```
+dataService.getTodos(function(response){
+  console.log(response.data);
+  $scope.todos = response.data;
+});
+```
+this will send all of the mock todos
+
+#### Using services to save and delete data
