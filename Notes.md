@@ -123,7 +123,8 @@ ng-app="todoListApp"
   ```
   <div ng-repeat="todo in todos">
   ```
-#### useing ng-blur and ng-class to improve user experience
+
+#### using ng-blur and ng-class to improve user experience
   1. when a user is editing the name of a todo, rather than having to click the edit button, all the have to do it click out of the input - use ng-blur - put it in the input
   ```
   <input ng-blur"editing = false;"
@@ -135,6 +136,7 @@ ng-app="todoListApp"
   ```
   <div class="item " ng-class="{'editing-item': editing}" ng-repeat="todo in todos">
   ```
+
 #### Use ng-change to set data state
   1. In our application we want to keep track if the user has edited a to do.
   2. add ng-change to our input
@@ -159,6 +161,7 @@ ng-app="todoListApp"
   ```
   <div class="item" ng-class="{'editing-item': editing, 'edited': todo.edited}" ng-repeat="todo in todos">
   ```
+
 #### Services
   1. add service in app.js
   2. Services can be used across your application through dependency injection
@@ -185,6 +188,7 @@ ng-app="todoListApp"
   ```
   ng-click="helloConsole()"
   ```
+  
 #### Using Services to get Data
   1. move todos to their own file - todos.json into a mock folder
   2. now the mock data will be like making requests to a server
