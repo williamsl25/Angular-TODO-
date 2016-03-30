@@ -26,8 +26,14 @@ angular.module('todoListApp')
   };
     // $index will delete it from the DOM - pass $index as a second parameter here as well as in the html
 
-    $scope.saveTodo = function(todo){
-      dataService.saveTodo(todo);
+    $scope.saveTodos = function(){
+      var filteredTodos = $scope.todos.filter(function(todo){
+        if(todo.edited){
+          //if the todo has been edited return it
+          return todo;
+        };
+      })
+      dataService.saveTodos(filteredTodos);
     };
 
 })

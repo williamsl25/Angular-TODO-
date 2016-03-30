@@ -314,3 +314,51 @@ ng-click="todo.completed = !todo.completed"
 ```
 
 * if the todo.completed is false, set it to true and visa versa
+
+#### custom directive for todos
+1. put the todos in their own directive called templates/todos.html
+2. create directives/todos.js and create the directive
+```
+angular.module('todoListApp')
+.directive('todos', function(){
+  return {
+    templateUrl: 'templates/todos.html'
+  }
+})
+```
+
+3. link the directive in index.html
+```
+<script src="scripts/directives/todos.js" type="text/javascript"></script>
+```
+
+4. remove ng-controller in th todos.html and put it in the todos.js directive
+
+#### Save all the todos and edit when click todo rather than the edit button
+1. data.js change this.saveTodo to this.saveTodos
+2. in main.js filter over todos array
+```
+$scope.saveTodos = function(){
+  var filteredTodos = $scope.todos.filter(function(todo){
+    if(todo.edited){
+      //if the todo has been edited return it
+      return todo;
+    };
+  })
+  dataService.saveTodos(filteredTodos);
+};
+```
+3. update saveTodos method in todos.html
+
+4. update saveTodos in data.js
+```
+this.saveTodos = function(todos){
+  console.log(todos.length + " todos have been saved ");
+};
+```
+5. when check or uncheck todos they don't get saved so to fix... add ; todo.edited = true on the ng-click of the span in todos.html
+```
+<span ng-click="todo.completed = !todo.completed; todo.edited = true"></span>
+```
+
+6. add ng-click="editing = true" to the label element so that user can edit by clicking the todo and remove the edit button
