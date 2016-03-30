@@ -5,30 +5,39 @@
     <title>Angular TODO app</title>
     <link href='https://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
     <link href='styles/main.css' rel='stylesheet' type="text/css">
+
   </head>
-  <body ng-app="toDoListApp">
+  <body ng-app="todoListApp">
     <h1 ng-click="helloWorld()">MY TODO APPlICATION</h1>
-      <div ng-controller="mainCtrl" class="list">
-      <!-- todo list will be here -->
-        <div class="item" ng-class="{'editing-item': editing, 'edited': todo.edited}" ng-repeat="todo in todos">
+    <div ng-controller="mainCtrl" class="list">
+    <!-- todo list will be here -->
+      <div class="add">
+        <a href="#" ng-click="addTodo()">+ Add a new task</a>
+      </div>
+      <div class="item" ng-class="{'editing-item': editing, 'edited': todo.edited, 'completed': todo.completed}" ng-repeat="todo in todos | orderBy: 'completed'" ng-init="todo.completed = false">
 
-          <input ng-model="todo.completed" type="checkbox">
+        <input ng-model="todo.completed" type="checkbox">
+        <span ng-click="todo.completed = !todo.completed"></span>
 
-          <label ng-hide="editing" class="editing-label" ng-click="helloWorld()">{{todo.name}}</label> <!-- .editing-label -->
+        <label ng-hide="editing" class="editing-label" ng-click="helloWorld()">{{todo.name}}</label> <!-- .editing-label -->
 
-          <input ng-change="todo.edited = true" ng-blur="editing = false;" ng-show="editing" ng-model="todo.name" class="editing-label"type="text"> <!-- .editing-label -->
+        <input ng-change="todo.edited = true" ng-blur="editing = false;" ng-show="editing" ng-model="todo.name" class="editing-label"type="text"> <!-- .editing-label -->
 
-        <!-- buttons -->
-          <div class="actions">
-            <a href="#" ng-click="editing = !editing">Edit</a>  <!-- if editing is set to true, set it to false and vise versa -->
-            <a href="#" ng-click="helloConsole()">Save</a>
-            <!-- says when user clicks save, fire the helloWorld function -->
-            <a href="#" class="Delete">Delete</a>
-          </div>  <!-- end of buttons           .actions -->
-        </div>   <!-- end ng-repeat all todos   .item-->
-      </div>  <!-- end list of all todos        .list-->
+      <!-- buttons -->
+        <div class="actions">
+          <a href="#" ng-click="editing = !editing">Edit</a>  <!-- if editing is set to true, set it to false and visa versa -->
+          <a href="#" ng-click="saveTodo(todo)">Save</a>
+          <!-- says when user clicks save, fire the saveTodo function -->
+          <a href="#" ng-click="deleteTodo(todo, $index)" class="Delete">Delete</a>
+        </div>  <!-- end of buttons           .actions -->
+
+      </div>   <!-- end ng-repeat all todos   .item-->
+    </div>  <!-- end list of all todos        .list-->
 
     <script src="bower_components/angular/angular.js" type="text/javascript"></script>
     <script src="scripts/app.js" type="text/javascript"></script>
+    <script src="scripts/controllers/main.js" type="text/javascript"></script>
+    <script src="scripts/services/data.js" type="text/javascript"></script>
+    <!-- <script src="scripts/directives/todos.js" type="text/javascript"></script> -->
   </body>
 </html>

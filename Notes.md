@@ -1,4 +1,4 @@
-## Todo App - Angular
+## Todo App - Angular https://teamtreehouse.com/library/angular-basics
 
 #### Set up angular
 1. bower init
@@ -11,7 +11,7 @@
 ```
 angular.module("todoListApp", []);
 ```
-8. The reason you include the empty array is so that Angular knows to create an app called ToDoListApp.
+8. The reason you include the empty array is so that Angular knows to create an app called todoListApp.
 9.  bootstrap our angular app within the HTML template in the body tag of index.html
 ```
 ng-app="todoListApp"
@@ -38,7 +38,7 @@ ng-app="todoListApp"
 #### create controller
   1. app.js
   ```
-  angular.module("toDoListApp", [])
+  angular.module("todoListApp", [])
     .controller('mainCtrl', function($scope) {
       $scope.helloWorld = function() {
         console.log("Hello there! This is the helloWorld controller function in the mainCtrl!");
@@ -188,7 +188,7 @@ ng-app="todoListApp"
   ```
   ng-click="helloConsole()"
   ```
-  
+
 #### Using Services to get Data
   1. move todos to their own file - todos.json into a mock folder
   2. now the mock data will be like making requests to a server
@@ -216,3 +216,101 @@ ng-app="todoListApp"
   8. this will send all of the mock todos
 
 #### Using services to save and delete data
+
+  1. Add delete method in service
+  ```
+  this.deleteTodo = function(todo){
+    console.log("the "+ todo.name + " todo has been deleted")
+  };
+  ```
+  * This is to simulate communication with the REST API which will then tell a database to actually delete the data in the database
+
+  2. Add save method in service
+
+  ```
+  this.saveTodo = function(todo){
+    console.log("the "+ todo.name + " todo has been saved")
+  };
+  ```
+
+  3. To make use of the service's methods, create a function that is accessible in the scope in the controller
+  ```
+  $scope.deleteTodo = function(todo){
+    dataService.deleteTodo(todo);
+  };
+  ```
+
+  4. In the index.html use ng-click to fire the function
+  ```
+  <a href="#" ng-click="deleteTodo(todo)" class="Delete">Delete</a>
+  ```
+
+  5. This will fire the function but not delete it from the UI.  TO do this, use the $index variable - in the index.html
+  ```
+  <a href="#" ng-click="deleteTodo(todo, $index)" class="Delete">Delete</a>
+  ```
+
+  6. in the controller -add the index and then splice the todo off the array of todos
+  ```
+  $scope.deleteTodo = function(todo, $index){
+    dataService.deleteTodo(todo);
+    $scope.todos.splice($index, 1);
+  };
+  ```
+
+  7. now add save method to the controller
+  ```
+  $scope.saveTodo = function(todo){
+    dataService.saveTodo(todo);
+  };
+  ```
+
+  8. add save in the index.html to fire the function
+  ```
+    ng-click="saveTodo(todo)"
+  ```
+
+#### Create new data in the UI and save it with a service
+  1. first create a link in the index
+  ```
+  <div class="add">
+    <a href="#" ng-click="addTodo()">+ Add a new task</a>
+  </div>
+  ```
+
+  2. in controller create a new addTodo function
+  ```
+  $scope.addTodo = function(){
+    var todo = {name: "This is a new todo"};
+    $scope.todos.push(todo);
+  };
+  ```
+
+#### using filters to order ng-repeat items
+  1. when you check a todo cross it out using a completed UI state with css
+
+  * use the ng-class directive to apply the completed cssin index.html
+```
+'completed': todo.completed
+```
+
+2. move the todo to the bottom of the list when it is completed by applying a filter to ng-repeat
+```
+ng-repeat="todo in todos | orderBy: 'completed'"
+```
+
+3. the orderBy filter will order undefined then true then false.  A todo starts off as undefined, then when checked turns to truen then when unchecked turns to false, so the false value does not return to the top of the list it stays at the bottom
+
+4. to fix this use ng-init directive - we want the complted value to start off as false not undefined - in index.html after ng-repeat=todo in todos...
+```
+ng-init="todo.completed = false"
+```
+
+5. new todos are added to the bottom of the list and we want them added to the top - the push method is pushing them to the end of the array - fix by using unshift instead of push which will add them to the beginning of the list
+
+6. add in our CSS for custom check boxes. the first style actually sets the display to none for our checkbox element. that's because our custom CSS is going to be applied to a span element. Add the span with ng-click
+```
+ng-click="todo.completed = !todo.completed"
+```
+
+* if the todo.completed is false, set it to true and visa versa
